@@ -1,4 +1,5 @@
 import React from "react";
+import { CircularProgress, Alert, Box } from "@mui/material";
 import FileUploader from "./FileUploader";
 import ColumnSelector from "./ColumnSelector";
 import ChartSelector from "./ChartSelector";
@@ -13,6 +14,8 @@ interface GanttStepperContentProps {
   selectedColumns: SelectedColumns;
   tasks: TaskData[];
   chartType: ChartType;
+  isProcessing?: boolean;
+  processingError?: string | null;
   onFileUpload: (file: File) => void;
   onColumnSelect: (type: keyof SelectedColumns, column: string) => void;
   onConfirm: () => void;
@@ -25,6 +28,8 @@ const GanttStepperContent: React.FC<GanttStepperContentProps> = ({
   selectedColumns,
   tasks,
   chartType,
+  isProcessing = false,
+  processingError = null,
   onFileUpload,
   onColumnSelect,
   onConfirm,
@@ -35,12 +40,33 @@ const GanttStepperContent: React.FC<GanttStepperContentProps> = ({
       {activeStep === 0 && <FileUploader onFileUpload={onFileUpload} />}
       
       {activeStep === 1 && (
-        <ColumnSelector
-          columns={columns}
-          selectedColumns={selectedColumns}
-          onColumnSelect={onColumnSelect}
-          onConfirm={onConfirm}
-        />
+        <>
+          {isProcessing ? (
+            <Box 
+              display="flex" 
+              flexDirection="column" 
+              alignItems="center" 
+              justifyContent="center" 
+              py={4}
+            >
+              <CircularProgress />
+              <Box mt={2}>Standardizing date formats with Gemini AI...</Box>
+            </Box>
+          ) : (
+            <ColumnSelector
+              columns={columns}
+              selectedColumns={selectedColumns}
+              onColumnSelect={onColumnSelect}
+              onConfirm={onConfirm}
+            />
+          )}
+          
+          {processingError && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {processingError}
+            </Alert>
+          )}
+        </>
       )}
       
       {activeStep === 2 && (

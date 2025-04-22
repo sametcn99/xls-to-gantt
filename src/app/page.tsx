@@ -21,6 +21,8 @@ export default function Home() {
     columns,
     selectedColumns,
     tasks,
+    isProcessing,
+    processingError,
     handleFileUpload,
     handleColumnSelect,
     generateGanttChart,
@@ -33,8 +35,10 @@ export default function Home() {
     setActiveStep(1);
   };
 
-  const handleColumnsConfirmed = () => {
-    if (generateGanttChart()) {
+  const handleColumnsConfirmed = async () => {
+    // Now handling the async nature of generateGanttChart which uses Gemini API
+    const success = await generateGanttChart();
+    if (success) {
       setActiveStep(2);
     }
   };
@@ -47,6 +51,7 @@ export default function Home() {
         </Typography>
         <Typography paragraph>
           Upload your Excel file, select the columns, and view the Gantt chart.
+          The application uses Gemini AI to standardize date formats.
         </Typography>
         <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>
           {steps.map((label) => (
@@ -62,6 +67,8 @@ export default function Home() {
           selectedColumns={selectedColumns}
           tasks={tasks}
           chartType={chartType}
+          isProcessing={isProcessing}
+          processingError={processingError}
           onFileUpload={handleFileUploaded}
           onColumnSelect={handleColumnSelect}
           onConfirm={handleColumnsConfirmed}
