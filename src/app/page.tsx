@@ -16,7 +16,7 @@ import { useExcelProcessor } from "../hooks/useExcelProcessor";
 export default function Home() {
   const [activeStep, setActiveStep] = useState(0);
   const [chartType, setChartType] = useState<ChartType>("mermaid");
-  
+
   const {
     columns,
     selectedColumns,
@@ -60,8 +60,8 @@ export default function Home() {
             </Step>
           ))}
         </Stepper>
-        
-        <GanttStepperContent 
+
+        <GanttStepperContent
           activeStep={activeStep}
           columns={columns}
           selectedColumns={selectedColumns}

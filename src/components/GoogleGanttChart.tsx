@@ -46,7 +46,7 @@ const GoogleGanttChart: React.FC<GoogleGanttChartProps> = ({ tasks }) => {
       console.warn("No tasks available to export.");
       return;
     }
-    
+
     try {
       await generateGanttExcel(tasks, "gantt_chart.xlsx");
     } catch (error) {
@@ -76,13 +76,18 @@ const GoogleGanttChart: React.FC<GoogleGanttChartProps> = ({ tasks }) => {
 
   return (
     <Paper elevation={3} sx={{ p: 4, overflow: "hidden" }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h6">
-          Gantt Chart (Google Charts)
-        </Typography>
-        <Button 
-          variant="contained" 
-          color="primary" 
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <Typography variant="h6">Gantt Chart (Google Charts)</Typography>
+        <Button
+          variant="contained"
+          color="primary"
           onClick={handleExportExcel}
           disabled={tasks.length === 0}
         >

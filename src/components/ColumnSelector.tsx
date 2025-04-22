@@ -117,9 +117,7 @@ const ColumnSelector: React.FC<ColumnSelectorProps> = ({
           }}
         >
           <FormControl fullWidth>
-            <InputLabel id="end-date-column-label">
-              End Date Column
-            </InputLabel>
+            <InputLabel id="end-date-column-label">End Date Column</InputLabel>
             <Select
               labelId="end-date-column-label"
               value={selectedColumns.endDate}

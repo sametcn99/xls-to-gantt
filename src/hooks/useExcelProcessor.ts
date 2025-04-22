@@ -46,19 +46,19 @@ export const useExcelProcessor = () => {
               (col) =>
                 col.toLowerCase().includes("desc") ||
                 col.toLowerCase().includes("task") ||
-                col.toLowerCase().includes("activity")
+                col.toLowerCase().includes("activity"),
             );
 
             const possibleStartDateCols = columnNames.filter(
               (col) =>
                 col.toLowerCase().includes("start") ||
-                col.toLowerCase().includes("begin")
+                col.toLowerCase().includes("begin"),
             );
 
             const possibleEndDateCols = columnNames.filter(
               (col) =>
                 col.toLowerCase().includes("end") ||
-                col.toLowerCase().includes("finish")
+                col.toLowerCase().includes("finish"),
             );
 
             // Pre-select columns if they can be detected
@@ -81,10 +81,7 @@ export const useExcelProcessor = () => {
     reader.readAsArrayBuffer(file);
   };
 
-  const handleColumnSelect = (
-    type: keyof SelectedColumns,
-    column: string
-  ) => {
+  const handleColumnSelect = (type: keyof SelectedColumns, column: string) => {
     setSelectedColumns((prev) => ({
       ...prev,
       [type]: column,
@@ -93,40 +90,42 @@ export const useExcelProcessor = () => {
 
   const generateGanttChart = async () => {
     if (!excelData.length) return false;
-    
+
     setIsProcessing(true);
     setProcessingError(null);
-    
+
     try {
       const { description, startDate, endDate } = selectedColumns;
 
       // Extract all start date and end date values from the data
       // and cast to appropriate types for Gemini API
-      const startDateValues = excelData.map(row => {
+      const startDateValues = excelData.map((row) => {
         const value = row[startDate];
         return value as string | number | Date;
       });
-      
-      const endDateValues = excelData.map(row => {
+
+      const endDateValues = excelData.map((row) => {
         const value = row[endDate];
         return value as string | number | Date;
       });
-      
+
       // Use Gemini API to standardize the dates
-      const standardizedStartDates = await standardizeDatesWithGemini(startDateValues);
-      const standardizedEndDates = await standardizeDatesWithGemini(endDateValues);
-      
+      const standardizedStartDates =
+        await standardizeDatesWithGemini(startDateValues);
+      const standardizedEndDates =
+        await standardizeDatesWithGemini(endDateValues);
+
       // Create tasks with standardized dates
       const ganttTasks: TaskData[] = excelData.map((row, index) => {
         // Extract values from selected columns
         const name = String(row[description] || `Task ${index + 1}`);
         let start: Date;
         let end: Date;
-        
+
         // Use standardized dates from Gemini API
         const standardizedStart = standardizedStartDates[index];
         const standardizedEnd = standardizedEndDates[index];
-        
+
         // Parse the standardized dates
         if (standardizedStart !== "invalid" && standardizedEnd !== "invalid") {
           start = new Date(standardizedStart);
@@ -135,7 +134,7 @@ export const useExcelProcessor = () => {
           // Fallback to original logic if Gemini couldn't standardize
           const startValue = row[startDate] as string | number | Date;
           const endValue = row[endDate] as string | number | Date;
-          
+
           // Check if the excel library already parsed these as dates
           if (startValue instanceof Date && endValue instanceof Date) {
             start = startValue;
@@ -146,14 +145,14 @@ export const useExcelProcessor = () => {
             end = new Date(endValue);
           }
         }
-        
+
         // If parsing fails or dates are invalid, use fallbacks
         if (isNaN(start.getTime())) start = new Date();
         if (isNaN(end.getTime())) end = new Date(start.getTime() + 86400000); // start + 1 day
-        
+
         // Ensure end date is after start date
         if (end < start) end = new Date(start.getTime() + 86400000);
-        
+
         // Return object matching the TaskData interface
         return {
           id: `${index}`, // Mermaid needs an ID
@@ -162,13 +161,15 @@ export const useExcelProcessor = () => {
           end, // End date
         };
       });
-      
+
       setTasks(ganttTasks);
       setIsProcessing(false);
       return true;
     } catch (error) {
       console.error("Error generating Gantt chart with Gemini:", error);
-      setProcessingError("An error occurred while standardizing dates with Gemini API.");
+      setProcessingError(
+        "An error occurred while standardizing dates with Gemini API.",
+      );
       setIsProcessing(false);
       return false;
     }
@@ -185,4 +186,4 @@ export const useExcelProcessor = () => {
     handleColumnSelect,
     generateGanttChart,
   };
-}
+};

@@ -1,7 +1,17 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Paper, Typography, Button, IconButton, Snackbar, Alert, Collapse, TextField } from "@mui/material";
+import {
+  Box,
+  Paper,
+  Typography,
+  Button,
+  IconButton,
+  Snackbar,
+  Alert,
+  Collapse,
+  TextField,
+} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CodeIcon from "@mui/icons-material/Code";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -90,12 +100,14 @@ ${tasks
                 ? [mermaidRef.current as HTMLElement]
                 : [],
             });
-            
+
             // Store SVG content for download
             if (mermaidRef.current) {
               const svgElement = mermaidRef.current.querySelector("svg");
               if (svgElement) {
-                const svgString = new XMLSerializer().serializeToString(svgElement);
+                const svgString = new XMLSerializer().serializeToString(
+                  svgElement,
+                );
                 setSvgContent(svgString);
               }
             }
@@ -144,7 +156,7 @@ ${tasks
       setCopySuccess(true);
       setTimeout(() => setCopySuccess(false), 3000); // Hide success message after 3 seconds
     } catch (err) {
-      console.error('Failed to copy text: ', err);
+      console.error("Failed to copy text: ", err);
     }
   };
 
@@ -158,26 +170,26 @@ ${tasks
     try {
       // Create a Blob from the SVG content
       const blob = new Blob([svgContent], { type: "image/svg+xml" });
-      
+
       // Create a download link
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `gantt-chart-${new Date().toISOString().split('T')[0]}.svg`;
-      
+      link.download = `gantt-chart-${new Date().toISOString().split("T")[0]}.svg`;
+
       // Append to body, click and remove
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
+
       // Clean up the URL object
       URL.revokeObjectURL(url);
-      
+
       // Show success message
       setDownloadSuccess(true);
       setTimeout(() => setDownloadSuccess(false), 3000);
     } catch (err) {
-      console.error('Failed to download SVG: ', err);
+      console.error("Failed to download SVG: ", err);
     }
   };
 
@@ -188,7 +200,14 @@ ${tasks
 
   return (
     <Paper elevation={3} sx={{ p: 4, overflow: "hidden" }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
         <Typography variant="h6" gutterBottom>
           Gantt Chart (Mermaid)
         </Typography>
@@ -201,7 +220,8 @@ ${tasks
             sx={{ mr: 1 }}
           >
             {showCode ? "Hide Code" : "Show Code"}
-          </Button>          <Button
+          </Button>{" "}
+          <Button
             startIcon={<DownloadIcon />}
             onClick={handleDownloadSvg}
             variant="outlined"
@@ -213,28 +233,35 @@ ${tasks
           </Button>
         </Box>
       </Box>
-
       <Collapse in={showCode}>
-        <Box sx={{ mb: 2, position: "relative", bgcolor: "#f5f5f5", borderRadius: 1, p: 1 }}>
+        <Box
+          sx={{
+            mb: 2,
+            position: "relative",
+            bgcolor: "#f5f5f5",
+            borderRadius: 1,
+            p: 1,
+          }}
+        >
           <TextField
             fullWidth
             multiline
             value={mermaidCode}
             InputProps={{
               readOnly: true,
-              sx: { 
+              sx: {
                 fontFamily: "monospace",
                 whiteSpace: "pre",
-                fontSize: "0.875rem", 
+                fontSize: "0.875rem",
               },
             }}
             variant="outlined"
             minRows={5}
             maxRows={15}
           />
-          <IconButton 
+          <IconButton
             sx={{ position: "absolute", top: 8, right: 8 }}
-            onClick={handleCopyCode} 
+            onClick={handleCopyCode}
             color="primary"
             title="Copy to clipboard"
           >
@@ -242,7 +269,6 @@ ${tasks
           </IconButton>
         </Box>
       </Collapse>
-
       <Box
         sx={{
           height: 500, // Adjust height as needed
@@ -286,23 +312,23 @@ ${tasks
           </Box>
         )}
       </Box>
-
       <Snackbar
         open={copySuccess}
         autoHideDuration={3000}
         onClose={() => setCopySuccess(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert severity="success" sx={{ width: '100%' }}>
+        <Alert severity="success" sx={{ width: "100%" }}>
           Code copied to clipboard!
         </Alert>
-      </Snackbar>      <Snackbar
+      </Snackbar>{" "}
+      <Snackbar
         open={downloadSuccess}
         autoHideDuration={3000}
         onClose={() => setDownloadSuccess(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert severity="success" sx={{ width: '100%' }}>
+        <Alert severity="success" sx={{ width: "100%" }}>
           SVG downloaded successfully!
         </Alert>
       </Snackbar>

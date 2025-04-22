@@ -26,15 +26,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          <Container
-            component={"main"}
-            sx={{
-              width: "100vw",
-              height: "100vh",
-            }}
-          >
-            {children}
-          </Container>
+        <Container
+          component={"main"}
+          sx={{
+            width: "100vw",
+            height: "100vh",
+          }}
+        >
+          {children}
+        </Container>
       </body>
     </html>
   );
