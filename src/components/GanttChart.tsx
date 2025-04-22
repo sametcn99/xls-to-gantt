@@ -13,7 +13,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
   return (
     <Paper elevation={3} sx={{ p: 4, overflow: 'hidden' }}>
       <Typography variant="h6" gutterBottom>
-        Gantt Tablosu
+        Gantt Chart
       </Typography>
       
       <Box 
@@ -39,7 +39,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
             color: 'text.secondary'
           }}>
             <Typography>
-              Gösterilecek veri yok
+              No data to display
             </Typography>
           </Box>
         )}

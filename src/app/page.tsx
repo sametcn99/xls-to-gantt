@@ -27,9 +27,9 @@ export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const steps = [
-    "Excel Dosyasını Yükle",
-    "Sütunları Seç",
-    "Gantt Tablosunu Görüntüle",
+    "Upload Excel File",
+    "Select Columns",
+    "View Gantt Chart",
   ];
 
   const handleFileUpload = (file: File) => {
@@ -90,7 +90,7 @@ export default function Home() {
         }
       } catch (error) {
         console.error("Error parsing Excel file:", error);
-        alert("Excel dosyası işlenirken bir hata oluştu.");
+        alert("An error occurred while processing the Excel file.");
       }
     };
     reader.readAsArrayBuffer(file);
@@ -158,12 +158,11 @@ export default function Home() {
     <Container maxWidth="xl" sx={{ mt: 4, mb: 8 }}>
       <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Excel&apos;den Gantt Tablosu
+          Excel to Gantt Chart
         </Typography>
 
         <Typography paragraph>
-          Excel dosyanızı yükleyin, sütunları seçin ve Gantt tablosunu
-          görüntüleyin.
+          Upload your Excel file, select the columns, and view the Gantt chart.
         </Typography>
 
         <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>

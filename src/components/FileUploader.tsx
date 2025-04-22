@@ -55,15 +55,15 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileUpload }) => {
           sx={{ height: 64, width: 64, mb: 2, opacity: 0.7 }}
         />
         {isDragActive ? (
-          <Typography variant="h6" color="primary.main">Dosyayı buraya bırakın...</Typography>
+          <Typography variant="h6" color="primary.main">Drop the file here...</Typography>
         ) : (
           <>
-            <Typography variant="h6" mb={1}>Excel Dosyasını Buraya Sürükleyin</Typography>
+            <Typography variant="h6" mb={1}>Drag & Drop Your Excel File Here</Typography>
             <Typography variant="body2" color="text.secondary" mb={2}>
-              veya dosya seçmek için tıklayın (.xlsx, .xls)
+              or click to select files (.xlsx, .xls)
             </Typography>
             <Button variant="contained" color="primary">
-              Dosya Seç
+              Select File
             </Button>
           </>
         )}

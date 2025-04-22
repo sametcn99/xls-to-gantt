@@ -48,10 +48,10 @@ const ColumnSelector: React.FC<ColumnSelectorProps> = ({
   return (
     <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
       <Typography variant="h6" gutterBottom>
-        Sütunları Eşleştirin
+        Map Columns
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Gantt tablosu oluşturmak için gerekli Excel sütunlarını seçin
+        Select the necessary Excel columns to generate the Gantt chart
       </Typography>{" "}
       <Grid container spacing={3} component="div">
         <Grid
@@ -62,16 +62,16 @@ const ColumnSelector: React.FC<ColumnSelectorProps> = ({
         >
           <FormControl fullWidth>
             <InputLabel id="description-column-label">
-              Açıklama Sütunu
+              Description Column
             </InputLabel>
             <Select
               labelId="description-column-label"
               value={selectedColumns.description}
-              label="Açıklama Sütunu"
+              label="Description Column"
               onChange={handleChange("description")}
             >
               <MenuItem value="">
-                <em>Seçiniz</em>
+                <em>Select...</em>
               </MenuItem>
               {columns.map((column) => (
                 <MenuItem key={column} value={column}>
@@ -90,16 +90,16 @@ const ColumnSelector: React.FC<ColumnSelectorProps> = ({
         >
           <FormControl fullWidth>
             <InputLabel id="start-date-column-label">
-              Başlangıç Tarihi Sütunu
+              Start Date Column
             </InputLabel>
             <Select
               labelId="start-date-column-label"
               value={selectedColumns.startDate}
-              label="Başlangıç Tarihi Sütunu"
+              label="Start Date Column"
               onChange={handleChange("startDate")}
             >
               <MenuItem value="">
-                <em>Seçiniz</em>
+                <em>Select...</em>
               </MenuItem>
               {columns.map((column) => (
                 <MenuItem key={column} value={column}>
@@ -118,16 +118,16 @@ const ColumnSelector: React.FC<ColumnSelectorProps> = ({
         >
           <FormControl fullWidth>
             <InputLabel id="end-date-column-label">
-              Bitiş Tarihi Sütunu
+              End Date Column
             </InputLabel>
             <Select
               labelId="end-date-column-label"
               value={selectedColumns.endDate}
-              label="Bitiş Tarihi Sütunu"
+              label="End Date Column"
               onChange={handleChange("endDate")}
             >
               <MenuItem value="">
-                <em>Seçiniz</em>
+                <em>Select...</em>
               </MenuItem>
               {columns.map((column) => (
                 <MenuItem key={column} value={column}>
@@ -145,7 +145,7 @@ const ColumnSelector: React.FC<ColumnSelectorProps> = ({
           disabled={!isComplete}
           onClick={onConfirm}
         >
-          Gantt Tablosunu Oluştur
+          Generate Gantt Chart
         </Button>
       </Box>
     </Paper>
