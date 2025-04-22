@@ -17,7 +17,7 @@ import { Task } from "gantt-task-react";
 
 export default function Home() {
   const [activeStep, setActiveStep] = useState(0);
-  const [excelData, setExcelData] = useState<Record<string, any>[]>([]);
+  const [excelData, setExcelData] = useState<Record<string, unknown>[]>([]);
   const [columns, setColumns] = useState<string[]>([]);
   const [selectedColumns, setSelectedColumns] = useState({
     description: "",
@@ -46,7 +46,7 @@ export default function Home() {
         // Convert to JSON
         const jsonData = XLSX.utils.sheet_to_json(worksheet) as Record<
           string,
-          any
+          unknown // Use unknown instead of any
         >[];
 
         if (jsonData.length > 0) {
@@ -118,8 +118,8 @@ export default function Home() {
       let end: Date;
 
       // Handle date parsing
-      const startValue = row[startDate];
-      const endValue = row[endDate];
+      const startValue = row[startDate] as string | number | Date; // Add type assertion
+      const endValue = row[endDate] as string | number | Date; // Add type assertion
 
       // Check if the excel library already parsed these as dates
       if (startValue instanceof Date && endValue instanceof Date) {
