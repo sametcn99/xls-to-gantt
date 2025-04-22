@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Paper, Typography, Button, IconButton, Snackbar, Alert, Collapse, TextField } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CodeIcon from "@mui/icons-material/Code";
+import DownloadIcon from "@mui/icons-material/Download";
 import mermaid from "mermaid";
 
 // Define a Task interface suitable for Mermaid Gantt
@@ -33,6 +34,8 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
   const [showCode, setShowCode] = useState(false);
   const [mermaidCode, setMermaidCode] = useState<string>("");
   const [copySuccess, setCopySuccess] = useState(false);
+  const [downloadSuccess, setDownloadSuccess] = useState(false);
+  const [svgContent, setSvgContent] = useState<string>("");
 
   // Set isClient to true when component mounts
   useEffect(() => {
@@ -87,6 +90,15 @@ ${tasks
                 ? [mermaidRef.current as HTMLElement]
                 : [],
             });
+            
+            // Store SVG content for download
+            if (mermaidRef.current) {
+              const svgElement = mermaidRef.current.querySelector("svg");
+              if (svgElement) {
+                const svgString = new XMLSerializer().serializeToString(svgElement);
+                setSvgContent(svgString);
+              }
+            }
           } catch (error) {
             console.error("Mermaid run error:", error);
             try {
@@ -97,6 +109,7 @@ ${tasks
               );
               if (mermaidRef.current) {
                 mermaidRef.current.innerHTML = svg;
+                setSvgContent(svg);
               }
             } catch (fallbackError) {
               console.error("Mermaid fallback rendering error:", fallbackError);
@@ -135,6 +148,39 @@ ${tasks
     }
   };
 
+  // Function to download SVG
+  const handleDownloadSvg = () => {
+    if (!svgContent) {
+      console.error("No SVG content available");
+      return;
+    }
+
+    try {
+      // Create a Blob from the SVG content
+      const blob = new Blob([svgContent], { type: "image/svg+xml" });
+      
+      // Create a download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `gantt-chart-${new Date().toISOString().split('T')[0]}.svg`;
+      
+      // Append to body, click and remove
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Clean up the URL object
+      URL.revokeObjectURL(url);
+      
+      // Show success message
+      setDownloadSuccess(true);
+      setTimeout(() => setDownloadSuccess(false), 3000);
+    } catch (err) {
+      console.error('Failed to download SVG: ', err);
+    }
+  };
+
   // Toggle code visibility
   const toggleCodeVisibility = () => {
     setShowCode(!showCode);
@@ -155,6 +201,15 @@ ${tasks
             sx={{ mr: 1 }}
           >
             {showCode ? "Hide Code" : "Show Code"}
+          </Button>          <Button
+            startIcon={<DownloadIcon />}
+            onClick={handleDownloadSvg}
+            variant="outlined"
+            size="small"
+            disabled={!svgContent}
+            sx={{ mr: 1 }}
+          >
+            Download SVG
           </Button>
         </Box>
       </Box>
@@ -240,6 +295,15 @@ ${tasks
       >
         <Alert severity="success" sx={{ width: '100%' }}>
           Code copied to clipboard!
+        </Alert>
+      </Snackbar>      <Snackbar
+        open={downloadSuccess}
+        autoHideDuration={3000}
+        onClose={() => setDownloadSuccess(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert severity="success" sx={{ width: '100%' }}>
+          SVG downloaded successfully!
         </Alert>
       </Snackbar>
     </Paper>
