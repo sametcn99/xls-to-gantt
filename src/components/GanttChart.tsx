@@ -33,10 +33,10 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
   useEffect(() => {
     setIsClient(true);
     // Initialize Mermaid only once
-    mermaid.initialize({ 
+    mermaid.initialize({
       startOnLoad: true,
       theme: "default",
-      securityLevel: 'loose'
+      securityLevel: "loose",
     });
   }, []);
 
@@ -65,31 +65,37 @@ ${tasks
         // Clear previous render if ref exists
         if (mermaidRef.current) {
           mermaidRef.current.innerHTML = "";
-          
+
           // Unique ID for this render
           const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
           mermaidRef.current.id = id;
-          
+
           // Set mermaid content
           mermaidRef.current.textContent = chartDefinition;
-          
+
           try {
             // Process the diagram
             await mermaid.run({
-              nodes: mermaidRef.current ? [mermaidRef.current as HTMLElement] : []
+              nodes: mermaidRef.current
+                ? [mermaidRef.current as HTMLElement]
+                : [],
             });
           } catch (error) {
             console.error("Mermaid run error:", error);
             try {
               // Alternative method as fallback
-              const { svg } = await mermaid.render('mermaid-graph', chartDefinition);
+              const { svg } = await mermaid.render(
+                "mermaid-graph",
+                chartDefinition,
+              );
               if (mermaidRef.current) {
                 mermaidRef.current.innerHTML = svg;
               }
             } catch (fallbackError) {
               console.error("Mermaid fallback rendering error:", fallbackError);
               if (mermaidRef.current) {
-                mermaidRef.current.innerHTML = '<p style="color: red;">Error rendering Gantt chart.</p>';
+                mermaidRef.current.innerHTML =
+                  '<p style="color: red;">Error rendering Gantt chart.</p>';
               }
             }
           }
@@ -97,7 +103,8 @@ ${tasks
       } catch (error) {
         console.error("Mermaid chart preparation error:", error);
         if (mermaidRef.current) {
-          mermaidRef.current.innerHTML = '<p style="color: red;">Error preparing Gantt chart data.</p>';
+          mermaidRef.current.innerHTML =
+            '<p style="color: red;">Error preparing Gantt chart data.</p>';
         }
       }
     };
@@ -109,7 +116,6 @@ ${tasks
 
     return () => clearTimeout(timer);
   }, [tasks, isClient]);
-
   return (
     <Paper elevation={3} sx={{ p: 4, overflow: "hidden" }}>
       <Typography variant="h6" gutterBottom>
@@ -123,11 +129,39 @@ ${tasks
         }}
       >
         {isClient ? (
-          <div ref={mermaidRef} className="mermaid">
-            {tasks.length === 0 && "No data to display"}
-          </div>
+          <>
+            <div
+              ref={mermaidRef}
+              className="mermaid"
+              key={`mermaid-container-${tasks.length}`}
+            >
+              {/* Mermaid will render here */}
+            </div>
+            {tasks.length === 0 && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  color: "text.secondary",
+                }}
+              >
+                <Typography>No data to display</Typography>
+              </Box>
+            )}
+          </>
         ) : (
-          <div>Loading chart...</div>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <Typography>Loading chart...</Typography>
+          </Box>
         )}
       </Box>
     </Paper>
