@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# XLS to Gantt Chart Converter
 
-## Getting Started
+A powerful and user-friendly tool for converting Excel files directly into interactive Gantt charts. Perfect for project managers, team leaders, and anyone who wants to visualize project timelines without the hassle of manual chart creation.
 
-First, run the development server:
+## ✨ Features
+
+- **Easy Excel Import**: Upload your Excel files with project data in seconds
+- **Smart Column Detection**: Automatically identifies task names, dates, and dependencies
+- **Export Options**: Save your Gantt charts for presentations and reporting
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+
+## 🚀 Live Demo
+
+Try the application live at [https://xls-to-gantt.vercel.app/](https://xls-to-gantt.vercel.app/)
+
+## 📋 Excel File Format
+
+For the best results, your Excel file should include these columns:
+
+- Task Name/ID
+- Start Date
+- End Date/Duration
+- Dependencies (optional)
+- Progress (optional)
+- Resources (optional)
+
+## 🛠️ Getting Started
+
+### Prerequisites
+
+- [Bun](https://bun.sh/) (preferred package manager)
+- Node.js 18.x or higher
+
+### Installation
+
+1. Clone the repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+git clone https://github.com/yourusername/xls-to-gantt.git
+cd xls-to-gantt
+```
+
+2. Install dependencies using Bun:
+
+```bash
+bun install
+```
+
+3. Run the development server:
+
+```bash
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🏗️ Built With
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [Next.js](https://nextjs.org/) - The React framework
+- [Material-UI](https://mui.com/) - UI component library
+- [Bun](https://bun.sh/) - JavaScript runtime and package manager
+- [React-Gantt](https://www.npmjs.com/package/gantt-task-react) - Gantt chart visualization
 
-## Learn More
+## 📱 Screenshots
 
-To learn more about Next.js, take a look at the following resources:
+_[Add screenshots of your application here]_
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🧩 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/             # Next.js app directory
+├── components/      # React components
+│   ├── FileUploader.tsx
+│   ├── ColumnSelector.tsx
+│   ├── GanttChart.tsx
+│   └── ...
+├── hooks/           # React custom hooks
+├── theme/           # Theme configuration
+├── types/           # TypeScript types
+└── utils/           # Utility functions
+```
 
-## Deploy on Vercel
+## 🤝 Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---

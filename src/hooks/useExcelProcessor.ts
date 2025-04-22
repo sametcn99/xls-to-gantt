@@ -1,6 +1,5 @@
 import { useState } from "react";
 import * as XLSX from "xlsx";
-import { SelectedColumns, TaskData } from "../types/gantt";
 import { standardizeDatesWithGemini } from "../utils/geminiApi";
 
 export const useExcelProcessor = () => {

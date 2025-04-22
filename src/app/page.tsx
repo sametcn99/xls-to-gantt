@@ -10,7 +10,6 @@ import {
   StepLabel,
 } from "@mui/material";
 import GanttStepperContent from "../components/GanttStepperContent";
-import { ChartType } from "../types/gantt";
 import { useExcelProcessor } from "../hooks/useExcelProcessor";
 
 export default function Home() {

@@ -6,7 +6,6 @@ import ChartSelector from "./ChartSelector";
 import GanttChart from "./GanttChart";
 import GanttTaskReact from "./GanttTaskReact";
 import GoogleGanttChart from "./GoogleGanttChart";
-import { SelectedColumns, TaskData, ChartType } from "../types/gantt";
 import { generateGanttExcel } from "@/utils/excelGenerator";
 
 interface GanttStepperContentProps {

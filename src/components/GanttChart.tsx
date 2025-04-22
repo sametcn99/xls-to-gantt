@@ -17,15 +17,6 @@ import CodeIcon from "@mui/icons-material/Code";
 import DownloadIcon from "@mui/icons-material/Download";
 import mermaid from "mermaid";
 
-// Define a Task interface suitable for Mermaid Gantt
-interface TaskData {
-  id: string;
-  name: string;
-  start: Date;
-  end: Date;
-  // Add other relevant fields if needed, e.g., dependencies
-}
-
 interface GanttChartProps {
   tasks: TaskData[];
 }
