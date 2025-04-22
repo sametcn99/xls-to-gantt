@@ -24,10 +24,10 @@ const GanttTaskReact: React.FC<GanttTaskReactProps> = ({ tasks }) => {
     name: task.name,
     start: task.start,
     end: task.end,
-    progress: 0,  // Default progress to 0
-    type: 'task',
+    progress: 0, // Default progress to 0
+    type: "task",
     isDisabled: false,
-    styles: { progressColor: '#0099ff', progressSelectedColor: '#0077cc' },
+    styles: { progressColor: "#0099ff", progressSelectedColor: "#0077cc" },
   }));
 
   return (
@@ -42,10 +42,11 @@ const GanttTaskReact: React.FC<GanttTaskReactProps> = ({ tasks }) => {
           overflow: "auto",
         }}
       >
-        {tasks.length > 0 ? (          <Gantt
+        {tasks.length > 0 ? (
+          <Gantt
             tasks={transformedTasks}
             viewMode={ViewMode.Day}
-            listCellWidth="200px"
+            listCellWidth="100px"
           />
         ) : (
           <Box
