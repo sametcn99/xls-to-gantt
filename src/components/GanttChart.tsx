@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography, Button, IconButton, Snackbar, Alert, Collapse, TextField } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CodeIcon from "@mui/icons-material/Code";
 import mermaid from "mermaid";
 
 // Define a Task interface suitable for Mermaid Gantt
@@ -28,6 +30,9 @@ const formatDate = (date: Date): string => {
 const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
   const mermaidRef = useRef<HTMLDivElement>(null);
   const [isClient, setIsClient] = useState(false);
+  const [showCode, setShowCode] = useState(false);
+  const [mermaidCode, setMermaidCode] = useState<string>("");
+  const [copySuccess, setCopySuccess] = useState(false);
 
   // Set isClient to true when component mounts
   useEffect(() => {
@@ -61,6 +66,8 @@ ${tasks
   )
   .join("\n")}
 `;
+        // Store the Mermaid code for display
+        setMermaidCode(chartDefinition);
 
         // Clear previous render if ref exists
         if (mermaidRef.current) {
@@ -116,11 +123,71 @@ ${tasks
 
     return () => clearTimeout(timer);
   }, [tasks, isClient]);
+
+  // Function to handle copying code to clipboard
+  const handleCopyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(mermaidCode);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 3000); // Hide success message after 3 seconds
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
+  // Toggle code visibility
+  const toggleCodeVisibility = () => {
+    setShowCode(!showCode);
+  };
+
   return (
     <Paper elevation={3} sx={{ p: 4, overflow: "hidden" }}>
-      <Typography variant="h6" gutterBottom>
-        Gantt Chart (Mermaid)
-      </Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          Gantt Chart (Mermaid)
+        </Typography>
+        <Box>
+          <Button
+            startIcon={<CodeIcon />}
+            onClick={toggleCodeVisibility}
+            variant="outlined"
+            size="small"
+            sx={{ mr: 1 }}
+          >
+            {showCode ? "Hide Code" : "Show Code"}
+          </Button>
+        </Box>
+      </Box>
+
+      <Collapse in={showCode}>
+        <Box sx={{ mb: 2, position: "relative", bgcolor: "#f5f5f5", borderRadius: 1, p: 1 }}>
+          <TextField
+            fullWidth
+            multiline
+            value={mermaidCode}
+            InputProps={{
+              readOnly: true,
+              sx: { 
+                fontFamily: "monospace",
+                whiteSpace: "pre",
+                fontSize: "0.875rem", 
+              },
+            }}
+            variant="outlined"
+            minRows={5}
+            maxRows={15}
+          />
+          <IconButton 
+            sx={{ position: "absolute", top: 8, right: 8 }}
+            onClick={handleCopyCode} 
+            color="primary"
+            title="Copy to clipboard"
+          >
+            <ContentCopyIcon fontSize="small" />
+          </IconButton>
+        </Box>
+      </Collapse>
+
       <Box
         sx={{
           height: 500, // Adjust height as needed
@@ -164,6 +231,17 @@ ${tasks
           </Box>
         )}
       </Box>
+
+      <Snackbar
+        open={copySuccess}
+        autoHideDuration={3000}
+        onClose={() => setCopySuccess(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert severity="success" sx={{ width: '100%' }}>
+          Code copied to clipboard!
+        </Alert>
+      </Snackbar>
     </Paper>
   );
 };

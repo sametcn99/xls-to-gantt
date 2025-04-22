@@ -25,6 +25,7 @@
     "react-dropzone": "^14.3.8",
     "react-gantt-chart": "^0.3.0-rc.11",
     "react-google-charts": "^5.2.1",
+    "react-zoom-pan-pinch": "^3.7.0",
     "styled-components": "^6.1.17",
     "xlsx": "^0.18.5"
   },
