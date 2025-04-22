@@ -12,8 +12,18 @@ import {
 import FileUploader from "../components/FileUploader";
 import ColumnSelector from "../components/ColumnSelector";
 import GanttChart from "../components/GanttChart";
+import GanttTaskReact from "../components/GanttTaskReact";
+import GoogleGanttChart from "../components/GoogleGanttChart";
+import ChartSelector, { ChartType } from "../components/ChartSelector";
 import * as XLSX from "xlsx";
-import { Task } from "gantt-task-react";
+
+// Define the TaskData interface expected by the Mermaid GanttChart component
+interface TaskData {
+  id: string;
+  name: string;
+  start: Date;
+  end: Date;
+}
 
 export default function Home() {
   const [activeStep, setActiveStep] = useState(0);
@@ -24,13 +34,10 @@ export default function Home() {
     startDate: "",
     endDate: "",
   });
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<TaskData[]>([]); // Use the new TaskData interface
+  const [chartType, setChartType] = useState<ChartType>("mermaid"); // Default to mermaid
 
-  const steps = [
-    "Upload Excel File",
-    "Select Columns",
-    "View Gantt Chart",
-  ];
+  const steps = ["Upload Excel File", "Select Columns", "View Gantt Chart"];
 
   const handleFileUpload = (file: File) => {
     const reader = new FileReader();
@@ -111,7 +118,8 @@ export default function Home() {
 
     const { description, startDate, endDate } = selectedColumns;
 
-    const ganttTasks: Task[] = excelData.map((row, index) => {
+    // Create tasks conforming to the TaskData interface for Mermaid
+    const ganttTasks: TaskData[] = excelData.map((row, index) => {
       // Extract values from selected columns
       const name = String(row[description] || `Task ${index + 1}`);
       let start: Date;
@@ -138,15 +146,12 @@ export default function Home() {
       // Ensure end date is after start date
       if (end < start) end = new Date(start.getTime() + 86400000);
 
+      // Return object matching the TaskData interface
       return {
-        id: `${index}`,
-        name,
-        start,
-        end,
-        progress: 0,
-        type: "task",
-        isDisabled: false,
-        styles: { progressColor: "#0077B6", progressSelectedColor: "#00B4D8" },
+        id: `${index}`, // Mermaid needs an ID
+        name, // Task name/description
+        start, // Start date
+        end, // End date
       };
     });
 
@@ -160,11 +165,9 @@ export default function Home() {
         <Typography variant="h4" component="h1" gutterBottom>
           Excel to Gantt Chart
         </Typography>
-
         <Typography paragraph>
           Upload your Excel file, select the columns, and view the Gantt chart.
         </Typography>
-
         <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>
           {steps.map((label) => (
             <Step key={label}>
@@ -172,9 +175,7 @@ export default function Home() {
             </Step>
           ))}
         </Stepper>
-
         {activeStep === 0 && <FileUploader onFileUpload={handleFileUpload} />}
-
         {activeStep === 1 && (
           <ColumnSelector
             columns={columns}
@@ -182,9 +183,23 @@ export default function Home() {
             onColumnSelect={handleColumnSelect}
             onConfirm={generateGanttChart}
           />
-        )}
+        )}{" "}
+        {activeStep === 2 && (
+          <>
+            <ChartSelector
+              selectedChart={chartType}
+              onChartChange={(type) => setChartType(type)}
+            />
 
-        {activeStep === 2 && <GanttChart tasks={tasks} />}
+            {chartType === "mermaid" && <GanttChart tasks={tasks} />}
+            {chartType === "gantt-task-react" && (
+              <GanttTaskReact tasks={tasks} />
+            )}
+            {chartType === "google-charts" && (
+              <GoogleGanttChart tasks={tasks} />
+            )}
+          </>
+        )}
       </Paper>
     </Container>
   );
