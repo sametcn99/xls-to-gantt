@@ -34,17 +34,22 @@ const GoogleGanttChart: React.FC<GoogleGanttChartProps> = ({ tasks }) => {
       task.name,
       task.start,
       task.end,
-      null,  // Duration (calculated automatically)
-      0,     // Percent complete (default to 0)
-      null,  // Dependencies (none by default)
+      null, // Duration (calculated automatically)
+      0, // Percent complete (default to 0)
+      null, // Dependencies (none by default)
     ]),
   ];
+  // Calculate height based on number of tasks (minimum 450px)
+  const taskCount = tasks.length;
+  const dynamicHeight = Math.max(450, taskCount * 50);
 
   const options = {
-    height: 450,
+    height: dynamicHeight,
     gantt: {
       trackHeight: 30,
       criticalPathEnabled: false,
+      defaultStartDate: tasks.length > 0 ? tasks[0].start : new Date(),
+      barCornerRadius: 3,
       arrow: {
         angle: 100,
         width: 2,
